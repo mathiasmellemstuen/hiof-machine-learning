@@ -12,8 +12,16 @@ from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 
-
 # Reading the data from the iris.data file
 data = pd.read_csv("iris.data", header=None)
+x = data.iloc[:, 0:3]
+y = data.iloc[:,4]
 
-#Is the task to implementing KNN manually? 
+testSetPercentage = 0.25
+
+trainingX, testX, trainingY, testY = train_test_split(x, y, test_size=testSetPercentage)
+
+trainingX = trainingX.reshape(-1, 1)
+trainingY = trainingY.reshape(-1, 1)
+
+neighbours = KNeighborsClassifier()

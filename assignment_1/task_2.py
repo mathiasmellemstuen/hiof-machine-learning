@@ -14,7 +14,6 @@ x = data.iloc[:, 0:3]
 y = data.iloc[:,4]
 
 testSetPercentage = 0.25
-
 trainingX, testX, trainingY, testY = train_test_split(x, y, test_size=testSetPercentage)
 
 neighbours = KNeighborsClassifier()

@@ -1,17 +1,121 @@
-\documentclass{article}
+\documentclass[titlepage, 11pt]{article}
 \title{Machine learning: Assignment 1}
 \author{Mathias Mellemstuen}
 \date{26 September 2021}
+\usepackage{times}
+\renewcommand{\baselinestretch}{1.5}
+
+\usepackage[margin=1.0in]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=Python,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
 
 \begin{document}
     \maketitle
-
-
+    
     \section{Content}
-    The content of this document will be the following: 
-    \begin{itemize}
-        \item Libraries
-        \item Functions
-        \item Procedures
-    \end{itemize}
+    The content of this report will describe the functions, libraries and procedures used to complete the two tasks in this assignment. Hence, this report will be divided into these sections respectively: Libraries, Functions, Procedures.
+	\section{Libraries}
+	
+	The library that were used in this assignment are the following: Numpy, Pandas, Matplotlib, sklearn.
+
+	\subsection{Numpy}
+	
+	\subsection{Pandas}
+	
+	\subsection{Matplotlib}
+	
+	\subsection{sklearn}
+	
+	
+	\section{Functions}
+	
+	Keep in mind that this report is not considering all functions used in the assignment. Only the most important and necessary functions to complete the assignment. The functions that is considered in this report are the following : read\_csv, train\_test\_split, LinearRegression.fit, KNeighboursClassifier.fit, KNeighboursClassifier.predict, plot, scatter and accuracy\_score.
+
+	\subsection{read\_csv}
+	
+	\begin{lstlisting}
+		import pandas as pd
+		pd.read_csv("data.txt")
+	\end{lstlisting}
+	This function comes from the Pandas library. The read\_csv function reads a file in the csv format. Then it puts the data in a Pandas object called DataFrame. This object can be used as a multidimentional array in python. In this case, 2-dimentional.
+
+	\subsection{train\_test\_split}
+	
+	\begin{lstlisting}
+		from sklearn import linear_model
+		trainingX, testX, trainingY, testY = train_test_split(X, y, test_size)
+		
+	\end{lstlisting}
+	This function splits a dataset into a training set and a testing set. You can specify the size of the sets with the test\_size hyperparameter. The function will divide the dataset into two sets randomly. This is to ensure that each sample is a random sample of the original dataset. The function will output the two new sets.
+	
+	\subsection{LinearRegression.fit and KNeighboursClassifier.fit}
+	
+	\begin{lstlisting}
+		from sklearn import linear_model
+		linearRegression = linear_model.LinearRegression()
+		linearRegression.fit(trainingX, trainingY)
+	\end{lstlisting}
+	This function comes from the sklearn library. The fit function fits a linear model to the input training data. This will run the linear regression training algorithm and produce the coefficient \emph{m} and the constant \emph{b} in a linear function $ f(x) = mx + b $.
+	
+	\begin{lstlisting}
+	from sklearn.neighbors import KNeighborsClassifier
+	neighbours = KNeighborsClassifier()
+	neighbours.fit(trainingX, trainingY)
+	\end{lstlisting}
+	The same function will be used for training with the KNeighboursClassifier algorithm. This makes it possible to call KNeighboursClassifier.predict in the future.
+	
+	\subsection{KNeighboursClassifier.predict}
+	
+	\begin{lstlisting}
+		from sklearn.neighbors import KNeighborsClassifier
+		neighbours = KNeighborsClassifier()
+		neighbours.fit(trainingX, trainingY)
+		predictionY = neighbours.predict(testX)
+	\end{lstlisting}
+	This function comes from the sklearn library. The predict function can predict the y value of some x value on a KNeighborsClassifier 
+	\subsection{plot}
+	
+	\begin{lstlisting}
+		import matplotlib.pyplot as plot
+		plot.plot([x1, x2], [y1, y2])
+	\end{lstlisting}
+	This function comes from the matplotlib library. The function is used to visualize and draw a line between two points in 2 dimentional space. In this context, it will be used to draw the linear function $ f(x) = mx + b $ with the coefficient and constant produced by the LinearRegression.fit function.
+	
+	\subsection{scatter}
+	
+	\begin{lstlisting}
+		import matplotlib.pyplot as plot
+		plot.scatter(x, y)
+	\end{lstlisting}
+	This function comes from the matplotlib library. It can be used to create a 2 dimentional scatter plot of the test and training data.
+	
+	\subsection{accuracy\_score}
+	\begin{lstlisting}
+		from sklearn import metrics
+		metrics.accuracy_score(testY, predictionY)
+	\end{lstlisting}
+	
+	\section{Procedures}
+	
 \end{document}

@@ -25,6 +25,7 @@ trainingX, testX, trainingY, testY = train_test_split(x, y, test_size=testSetPer
 trainingX = trainingX.reshape(-1, 1)
 trainingY = trainingY.reshape(-1, 1)
 
+# Running linear regression on the dataset
 linearRegression = linear_model.LinearRegression()
 linearRegression.fit(trainingX, trainingY)
 
@@ -33,6 +34,7 @@ b = linearRegression.intercept_
 
 y = m * trainingX + b
 
+# Plotting the line
 plot.plot([min(trainingX), max(trainingX)], [min(y), max(y)], linewidth=2, color='orange')
 
 # Showing training data (in blue) and test data (in green)
@@ -42,6 +44,7 @@ plot.scatter(testX, testY, color = 'red')
 # Displaying legend text
 plot.legend(["Regression function", "Training data", "Test data"])
 
+# Showing the matplotlib window
 plot.title("Linear regression: Truck data")
 plot.show()
 

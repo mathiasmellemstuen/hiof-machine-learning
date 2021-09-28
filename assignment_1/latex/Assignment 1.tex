@@ -39,14 +39,14 @@
 	
 	The library that were used in this assignment are the following: Numpy, Pandas, Matplotlib, sklearn.
 
-	\subsection{Numpy}
-	
+	\subsection{NumPy}
+	The NumPy library is a library that contains mathematical functionality and is a good choice for doing data manipulation. The matrix and array functionality of NumPy is especially used in this assignment.  
 	\subsection{Pandas}
-	
+	Pandas library contains data analysis and manipulation tools, much like NumPy. Pandas also has a file reader / parser function. We are only using this function from the Pands library in this assignment.
 	\subsection{Matplotlib}
-	
-	\subsection{sklearn}
-	
+	Matplotlib is a library that allows you to plot different graphs / plots on a canvas. Very powerful in terms of visualization. 
+	\subsection{Sklearn}
+	Sklearn is a machine learning library for python. This library has functionality for almost all kinds of machine learning techniques. We are only using KNeighboursClassifier, train\_test\_split and LinearRegression from this library in this assignment.
 	
 	\section{Functions}
 	
@@ -56,7 +56,7 @@
 	
 	\begin{lstlisting}
 		import pandas as pd
-		pd.read_csv("data.txt")
+		pd.read_csv("data.csv")
 	\end{lstlisting}
 	This function comes from the Pandas library. The read\_csv function reads a file in the csv format. Then it puts the data in a Pandas object called DataFrame. This object can be used as a multidimentional array in python. In this case, 2-dimentional.
 
@@ -93,7 +93,7 @@
 		neighbours.fit(trainingX, trainingY)
 		predictionY = neighbours.predict(testX)
 	\end{lstlisting}
-	This function comes from the sklearn library. The predict function can predict the y value of some x value on a KNeighborsClassifier 
+	This function comes from the sklearn library. The predict function can predict the y value of some x value on a KNeighborsClassifier.
 	\subsection{plot}
 	
 	\begin{lstlisting}
@@ -115,7 +115,15 @@
 		from sklearn import metrics
 		metrics.accuracy_score(testY, predictionY)
 	\end{lstlisting}
-	
+	The accuracy\_score function is used to calculate the difference between two datasets. Ouputs the difference in percentage ( i.e. 0 - 1).
 	\section{Procedures}
 	
+	Both of the tasks in this assignment had the same procedure to solve. The procedure can be explained like this algorithm: 
+	\begin{itemize}
+		\item Read and parse the data file with Pandas.
+		\item Splitting the data in two parts: x and y.
+		\item Split the data in a training and testing set.
+		\item Using the fit function of either LinearRegression or KNeighborsClassifier.
+		\item For LinearRegression; Plot the line. For KNeighborsClassifier; Predict the test values and compare the prediction to the test values. 
+	\end{itemize}
 \end{document}

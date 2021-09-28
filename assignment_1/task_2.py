@@ -13,14 +13,17 @@ data = pd.read_csv("iris.data", header=None)
 x = data.iloc[:, 0:3]
 y = data.iloc[:,4]
 
+# Splitting the dataset into a training set and a test set. 
 testSetPercentage = 0.25
 trainingX, testX, trainingY, testY = train_test_split(x, y, test_size=testSetPercentage)
 
+# Running KNeighboursClassifier on the dataset
 neighbours = KNeighborsClassifier()
 neighbours.fit(trainingX, trainingY)
 
 # Predicting how accurate the model is
 predictionY = neighbours.predict(testX)
 
+# Printing the percentage of the accuracy
 accuracy = round(100 * metrics.accuracy_score(testY, predictionY), 2) 
 print(f"The accuracy of the model is: {accuracy}%")

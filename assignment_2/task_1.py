@@ -3,6 +3,8 @@
 # Artificial Neural Network 
 # Mathias Mellemstuen
 
+from cgi import test
+from venv import create
 from sklearn.datasets import load_digits
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -18,6 +20,7 @@ def createAndRunMLPClassifier(testSize, hiddenLayerSize, maxIterations):
     4. Using the trainingdata with the fit function
     5. Prediction with the test data
     6. Printing a score of accuracy of the prediction
+    7. Returning the score
     """
 
     # Loading data
@@ -36,8 +39,9 @@ def createAndRunMLPClassifier(testSize, hiddenLayerSize, maxIterations):
     clf.predict_proba(testX)
     
     # Predicting how accurate the model is and printing it
-    modelScore = clf.score(testX, testY)
-    print(f"The mean accuracy of the test data and labels is {round(modelScore, 4) * 100}%")
+    score = clf.score(testX, testY)
+    print(f"The mean accuracy of the test data and labels is {round(score * 100, 2)}%")
+    return score
 
 
 if __name__ == "__main__":
@@ -46,3 +50,16 @@ if __name__ == "__main__":
     createAndRunMLPClassifier(testSize = 0.7, hiddenLayerSize = (100,50), maxIterations = 40000)
     createAndRunMLPClassifier(testSize = 0.3, hiddenLayerSize = (1,), maxIterations = 40000)
     createAndRunMLPClassifier(testSize = 0.3, hiddenLayerSize = (100, 200, 50, 50), maxIterations = 40000)
+
+    # Getting the score array where hidden layer size is increased by 1 for each iteration
+    scoreArr = []
+    for i in range(1, 102):
+        scoreArr.append(createAndRunMLPClassifier(testSize=0.3, hiddenLayerSize=(i,), maxIterations=400))
+        print(f"{i}%")
+    
+    # Plotting the score array. 
+    plt.plot(scoreArr, color="red")   
+    plt.xlabel("Nodes in hidden layer")
+    plt.ylabel("Score (%)")
+    plt.title("Scores of neural networks with hidden layer node size between 0 - 100")
+    plt.show()

@@ -5,7 +5,7 @@
 
 import numpy as np
 import pandas as pd
-import matpleeotlib.pyplot as plot
+import matplotlib.pyplot as plot
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 
@@ -47,5 +47,3 @@ plot.legend(["Regression function", "Training data", "Test data"])
 # Showing the matplotlib window
 plot.title("Linear regression: Truck data")
 plot.show()
-
-

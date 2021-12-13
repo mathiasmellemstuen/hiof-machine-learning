@@ -35,10 +35,10 @@ def forwardPropagation(input, weights):
     weights: Array of weights between every node in the network
     """
 
-    arr = []
-    arr.append(sigmoidFunction(numpy.dot(weights[0].T, input)))
-    arr.append(sigmoidFunction(numpy.dot(weights[1].T, numpy.insert(arr[0], 0, 1, axis = 0))))
-    return arr
+    weight0DotInput = numpy.dot(weights[0].T, input)
+    weight1DotWeight0 = numpy.dot(weights[1].T, numpy.insert(weight0DotInput, 0, 1, axis = 0))
+
+    return [sigmoidFunction(weight0DotInput), sigmoidFunction(weight1DotWeight0)]
 
 def backPropagation(input, out, target, weights, learningRate, deltaWeights):
     """

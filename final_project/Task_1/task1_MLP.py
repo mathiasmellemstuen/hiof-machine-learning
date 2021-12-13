@@ -37,7 +37,7 @@ def forwardPropagation(input, weights):
 
     arr = []
     arr.append(sigmoidFunction(numpy.dot(weights[0].T, input)))
-    arr.append(sigmoidFunction(numpy.dot(weights[1].T, numpy.insert(arr[0], 0, 1, axis=0))))
+    arr.append(sigmoidFunction(numpy.dot(weights[1].T, numpy.insert(arr[0], 0, 1, axis = 0))))
     return arr
 
 def backPropagation(input, out, target, weights, learningRate, deltaWeights):
@@ -57,14 +57,17 @@ def backPropagation(input, out, target, weights, learningRate, deltaWeights):
     out0Compliment = 1 - out[0] 
     out1Compliment = 1 - out[1]
 
-    targetDifference = target - out[1]
+    targetDifference = target - out[1] # Difference between the target value and the current output
 
+    # Calculating the change in weights for the second matrix
     delta1 = out[1] * out1Compliment * targetDifference 
-    deltaWeights[1] = learningRate * delta1.T * numpy.insert(out[0], 0, 1, axis=0)
+    deltaWeights[1] = learningRate * delta1.T * numpy.insert(out[0], 0, 1, axis = 0)
     
-    delta0 = out[0] * out0Compliment * weights[1][1:,:] * delta1
+    # Calculating the change change in weights for the first matrix
+    delta0 = out[0] * out0Compliment * weights[1][1:, :] * delta1
     deltaWeights[0] = learningRate * delta0.T * input
 
+    # Adding the change to the weight matrices
     weights[0] = weights[0] + deltaWeights[0]
     weights[1] = weights[1] + deltaWeights[1]
 
@@ -107,15 +110,21 @@ def createDataset():
     # Creating a list that represents if the number if odd or even
     oddEven = numpy.array([(1 if i % 2 == 1 else 0) for i in range(0,16)])
 
-    return number.T, oddEven.T
+    return number.T, oddEven
 
 def createRandomWeights():
     """
-    Creating random weight matrix. The weights are a random number between -1 and 1. 
+    Creating random weight matrix. The weights are a random number between -1.0 and 1.0. 
     """
     arr = []
-    arr.append(numpy.random.uniform(-1, 1, (5, 4)))
-    arr.append(numpy.random.uniform(-1, 1, (5, 1)))
+    arr.append(numpy.random.uniform(-1.0, 1.0, (5, 4)))
+    arr.append(numpy.random.uniform(-1.0, 1.0, (5, 1)))
+    return arr
+
+def createDeltaWeights(): 
+    arr = []
+    arr.append(numpy.zeros((5, 4)))
+    arr.append(numpy.zeros((5, 1)))
     return arr
 
 def perceptron(input, output, weights, learningRate):
@@ -132,7 +141,7 @@ def perceptron(input, output, weights, learningRate):
     Returning the number of epochs
     """
 
-    deltaWeights = [numpy.zeros((5, 4))] + [numpy.zeros((5, 1))] # Contains the change in the weights. Every value here is initially zero
+    deltaWeights = createDeltaWeights() # Contains the change in the weights. Every value here is initially zero
     epochs = 0 # Contains number of passes of the training
 
     # Initially assuming that there is an error
@@ -151,7 +160,7 @@ def perceptron(input, output, weights, learningRate):
             # Running back propagation with the output from the forward propagation
             backPropagation(currentInput, forwardPropagationOutput, output[i], weights, learningRate, deltaWeights)
 
-            # Checking if there is an error
+            # Checking if there is an error after running forward and back propagation
             error = True if numpy.abs(output[i] - forwardPropagationOutput[1]) >= 0.05 else False
 
             # Incrementing epochs at the end of the algorithm

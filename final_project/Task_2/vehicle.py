@@ -25,12 +25,27 @@ class Vehicle:
         return self.getRouteDistance()
     
     def createOffspringVehicles(self, partnerVehicle):
-        selfRandomCustomerIndex = random.randrange(0, len(self.route) - 1)
-        partnerRandomCustomerIndex = random.randrange(0, len(partnerVehicle.route) - 1)
-        offspring1 = self.copy()
-        offspring1.route.insert(selfRandomCustomerIndex, partnerVehicle.route[partnerRandomCustomerIndex])
-        offspring2 = partnerVehicle.copy()
-        offspring2.route.insert(partnerRandomCustomerIndex, self.route[selfRandomCustomerIndex])
+
+        allCustomers = self.route + partnerVehicle.route
+
+        offspring1 = Vehicle(self.homeDepot)
+        offspring2 = Vehicle(partnerVehicle.homeDepot)
+
+        flip = True
+        for customer in allCustomers:
+            if flip: 
+                offspring1.route.append(customer)
+            else: 
+                offspring2.route.append(customer)
+            
+            flip = not flip
+
+        # selfRandomCustomerIndex = random.randrange(0, len(self.route) - 1)
+        # partnerRandomCustomerIndex = random.randrange(0, len(partnerVehicle.route) - 1)
+        # offspring1 = self.copy()
+        # offspring1.route.insert(selfRandomCustomerIndex, partnerVehicle.route[partnerRandomCustomerIndex])
+        # offspring2 = partnerVehicle.copy()
+        # offspring2.route.insert(partnerRandomCustomerIndex, self.route[selfRandomCustomerIndex])
 
         return offspring1, offspring2
 
@@ -40,14 +55,13 @@ class Vehicle:
         random1 = random.randrange(0, len(self.route) - 1)
         random2 = random.randrange(0, len(self.route) - 1)
 
-        while len(self.route) > 1 and random1 != random2:
+        while len(self.route) > 1 and random1 == random2:
             random2 = random.randrange(0, len(self.route) - 1)
         
         if random1 == random2: 
-            # print("Error: The number of points in the route is <= 1")
+            print("Error: The number of points in the route is <= 1")
             return
         
-
         # Swap mutation
         random1Value = self.route[random1]
         self.route[random1] = self.route[random2]

@@ -1,4 +1,5 @@
 import math
+import copy
 
 class Position: 
     def __init__(self, x, y):
@@ -10,3 +11,6 @@ class Position:
     
     def __str__(self): 
         return f'Position: x: {self.x} y: {self.y}'
+
+    def copy(self): 
+        return Position(copy.copy(self.x), copy.copy(self.y))

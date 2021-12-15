@@ -5,8 +5,6 @@ import copy
 class Vehicle:
     def __init__(self, homeDepot):
         self.homeDepot = homeDepot
-        self.currentLoad = 0
-        self.currentDuration = 0
         self.route = []
 
     def getRouteDistance(self): 
@@ -27,53 +25,28 @@ class Vehicle:
     def createOffspringVehicles(self, partnerVehicle):
 
         allCustomers = self.route + partnerVehicle.route
+        random.shuffle(allCustomers)
+        
+        offspring1 = Vehicle(self.homeDepot.copy())
+        offspring2 = Vehicle(partnerVehicle.homeDepot.copy())
 
-        offspring1 = Vehicle(self.homeDepot)
-        offspring2 = Vehicle(partnerVehicle.homeDepot)
+        length = int(len(allCustomers))
 
-        flip = True
-        for customer in allCustomers:
-            if flip: 
-                offspring1.route.append(customer)
-            else: 
-                offspring2.route.append(customer)
-            
-            flip = not flip
-
-        # selfRandomCustomerIndex = random.randrange(0, len(self.route) - 1)
-        # partnerRandomCustomerIndex = random.randrange(0, len(partnerVehicle.route) - 1)
-        # offspring1 = self.copy()
-        # offspring1.route.insert(selfRandomCustomerIndex, partnerVehicle.route[partnerRandomCustomerIndex])
-        # offspring2 = partnerVehicle.copy()
-        # offspring2.route.insert(partnerRandomCustomerIndex, self.route[selfRandomCustomerIndex])
+        for customer in allCustomers[:length//2]:
+            offspring1.route.append(customer.copy())
+        
+        for customer in allCustomers[length//2:]:
+            offspring2.route.append(customer.copy())
 
         return offspring1, offspring2
 
 
     def mutate(self): # Swap mutation or scramble mutation
-        
-        random1 = random.randrange(0, len(self.route) - 1)
-        random2 = random.randrange(0, len(self.route) - 1)
 
-        while len(self.route) > 1 and random1 == random2:
-            random2 = random.randrange(0, len(self.route) - 1)
-        
-        if random1 == random2: 
-            print("Error: The number of points in the route is <= 1")
-            return
-        
         # Swap mutation
-        random1Value = self.route[random1]
-        self.route[random1] = self.route[random2]
-        self.route[random2] = random1Value
+        pair = random.sample(self.route, 2)
+        pair[0], pair[1] = pair[1], pair[0]
 
-    def copy(self):
-        vehicleCopy = Vehicle(self.homeDepot)
-        vehicleCopy.currentLoad = copy.copy(self.currentLoad)
-        vehicleCopy.currentDuration = copy.copy(self.currentDuration)
-        vehicleCopy.route = []
 
-        for customer in self.route: 
-            vehicleCopy.route.append(customer.copy())
-
-        return vehicleCopy
+    def __str__(self):
+        return f'Belonging to depot {self.homeDepot.id} with a route of {len(self.route)} customers'

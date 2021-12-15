@@ -12,5 +12,5 @@ class Customer:
         return f'Customer ID {self.id}: {self.position} with service duration: {self.serviceDuration} and demand: {self.demand}'
 
     def copy(self): 
-        newCustomer = Customer(copy.copy(self.id), Position(copy.copy(self.position.x), copy.copy(self.position.y)), copy.copy(self.serviceDuration), copy.copy(self.demand))
+        newCustomer = Customer(copy.copy(self.id), self.position.copy(), copy.copy(self.serviceDuration), copy.copy(self.demand))
         return newCustomer

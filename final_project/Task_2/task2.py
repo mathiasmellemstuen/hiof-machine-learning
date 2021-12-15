@@ -2,8 +2,6 @@
 
 # References used in task 2: 
 
-from audioop import cross
-from tabnanny import check
 import numpy
 import matplotlib.pyplot as plot
 from customer import Customer 
@@ -67,7 +65,7 @@ def plotVehicles(vehicles):
         y.append(vehicle.homeDepot.position.y)
         y.insert(0, vehicle.homeDepot.position.y)
 
-        plot.plot(x, y, color = randomColor())
+        plot.plot(x, y, color = randomColor(), linewidth = 0.85)
 
 def testVehicles(vehicles): 
     print("Simular customer test")
@@ -134,84 +132,49 @@ def generateRandomPopulation(numVehiclesPerDepot, depots, customers):
             
     return vehicles
 
-def fitness(vehicle): 
-    pass
-
-def crossover(parent1, parent2): 
-    pass
-
-def selectNewPopulation(offspring, oldPopulation): 
-    pass
-
-# t = 0
-# Generate random population
-# Evaluate the fitness of each invidual in the population
-# loop:
-#   Select parents based on fitness
-#   Apply crossover to create offstring from the selected parents
-#   Apply mutation to offspring
-#   Evaluate fitness of offspring
-#   Select new population based on current offspring and parents 
-#   Checking if values is satifactory, if so, break.
-
-
 def randomColor():
     return (random.random(), random.random(), random.random())
 
 def geneticAlgorithm(vehicles, iterations):
 
     for i in range(0, iterations):
-        # print(f'Iteration {i}/{iterations}')
 
-        doneVehicles = []
-        offsprings = []
-        while len(vehicles) - len(doneVehicles) > 1:
-            
-            pair = random.sample(vehicles, 2)
+        pair = random.sample(vehicles, 2)
+        o1, o2 = pair[0].createOffspringVehicles(pair[1])
 
-            offspring1, offspring2 = pair[0].createOffspringVehicles(vehicles[1])
-            
-            if offspring1.fitness() < pair[0].fitness():
-                # offsprings.append((pair[0], offspring1))
-                pair[0] = offspring1
-            
+        o1.mutate()
+        o2.mutate()
 
-            if offspring2.fitness() < pair[1].fitness():
-                # offsprings.append((pair[1], offspring2))
-                pair[1] = offspring2
+        if o1.fitness() + o2.fitness() < pair[0].fitness() + pair[1].fitness():
+            vehicles.remove(pair[0])
+            vehicles.append(o1)
+            vehicles.remove(pair[1])
+            vehicles.append(o2)
 
-            doneVehicles.append(pair[0])
-            doneVehicles.append(pair[1])
 
-        # print("Before")
-        # testVehicles(vehicles)
-
-        # for offspring in offsprings: 
-        #     for i in range(0, len(vehicles)): 
-        #         if vehicles[i] is offspring[0]: 
-        #             vehicles[i] = offspring[1]
-
-        print("After")
-        testVehicles(vehicles)
     return vehicles
 
-def checkForSimularVehicles(group1, group2): 
-    for vehicle1 in group1: 
-        for vehicle2 in group2: 
-            if vehicle1.fitness() == vehicle2.fitness(): 
-                print("The same!")
+def totalDistance(vehicles):
+    score = 0 
+
+    for vehicle in vehicles:
+        score = score + vehicle.getRouteDistance()
+    
+    return score
 
 if __name__ == "__main__":
     numVehicles, numCustomers, numDepots, depots, customers = readAndParseDataFile("p01.txt")
 
     plot.figure(0)
     plotPositions(customers, depots)
-    vehicles = generateRandomPopulation(numVehiclesPerDepot = numVehicles, depots = depots, customers = customers)    
+    vehicles = generateRandomPopulation(numVehiclesPerDepot = numVehicles, depots = depots, customers = customers)
+    plot.title(f'Total traveling distance: {int(totalDistance(vehicles))}')
     plotVehicles(vehicles)
+
     plot.figure(1)
     plotPositions(customers, depots)
-    newVehicles = geneticAlgorithm(vehicles, 100)
+    newVehicles = geneticAlgorithm(vehicles, 10000)
+    plot.title(f'Total traveling distance: {int(totalDistance(newVehicles))}')
     plotVehicles(newVehicles)
 
-    checkForSimularVehicles(vehicles, newVehicles)
     plot.show()

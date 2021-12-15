@@ -10,6 +10,7 @@ from position import Position
 from vehicle import Vehicle
 import re
 import random
+import sys
 
 def readAndParseDataFile(file): 
 
@@ -139,6 +140,9 @@ def geneticAlgorithm(vehicles, iterations):
 
     for i in range(0, iterations):
 
+        sys.stdout.write(f'\rIteration progress: {int(i / iterations * 100) + 1}%')
+        sys.stdout.flush()
+
         pair = random.sample(vehicles, 2)
         o1, o2 = pair[0].createOffspringVehicles(pair[1])
 
@@ -150,7 +154,6 @@ def geneticAlgorithm(vehicles, iterations):
             vehicles.append(o1)
             vehicles.remove(pair[1])
             vehicles.append(o2)
-
 
     return vehicles
 
@@ -173,7 +176,7 @@ if __name__ == "__main__":
 
     plot.figure(1)
     plotPositions(customers, depots)
-    newVehicles = geneticAlgorithm(vehicles, 10000)
+    newVehicles = geneticAlgorithm(vehicles, 100000)
     plot.title(f'Total traveling distance: {int(totalDistance(newVehicles))}')
     plotVehicles(newVehicles)
 

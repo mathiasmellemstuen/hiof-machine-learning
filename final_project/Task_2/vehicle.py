@@ -1,10 +1,10 @@
 from depot import Depot
 import random
-import copy
 
 class Vehicle:
-    def __init__(self, homeDepot):
+    def __init__(self, homeDepot, id):
         self.homeDepot = homeDepot
+        self.id = id
         self.route = []
 
     def getRouteDistance(self): 
@@ -19,34 +19,66 @@ class Vehicle:
 
         return routeDistance
 
-    def fitness(self):
-        return self.getRouteDistance()
-    
-    def createOffspringVehicles(self, partnerVehicle):
+    def getRouteCarryingLoad(self): 
+        currentLoad = 0
 
-        allCustomers = self.route + partnerVehicle.route
+        for customer in self.route: 
+            currentLoad += customer.demand
+        
+        return currentLoad
+
+    def fitness(self):
+        
+        distancePenalty = -1000 if self.homeDepot.maximumRouteDuration != 0 and self.getRouteDistance() > self.homeDepot.maximumRouteDuration else 0
+        loadPenalty = -1000 if self.homeDepot.maximumLoad != 0 and self.getRouteCarryingLoad() > self.homeDepot.maximumLoad else 0
+
+        fitness = len(self.route) / self.getRouteDistance()
+
+        return fitness + distancePenalty + loadPenalty
+
+    def createOffspringVehicles(self, partnerVehicle):
+        
+        allCustomers = list(self.route) + list(partnerVehicle.route)
         random.shuffle(allCustomers)
         
-        offspring1 = Vehicle(self.homeDepot.copy())
-        offspring2 = Vehicle(partnerVehicle.homeDepot.copy())
+        offspring1 = Vehicle(self.homeDepot, self.id)
+        offspring2 = Vehicle(partnerVehicle.homeDepot, partnerVehicle.id)
 
         length = int(len(allCustomers))
 
         for customer in allCustomers[:length//2]:
-            offspring1.route.append(customer.copy())
+            offspring1.route.append(customer)
         
         for customer in allCustomers[length//2:]:
-            offspring2.route.append(customer.copy())
+            offspring2.route.append(customer)
 
         return offspring1, offspring2
 
+    def mutate(self, probability = 0.8): 
+        
+        max = 100 
+        rand = random.randint(0, max)
 
-    def mutate(self): # Swap mutation or scramble mutation
+        if rand > max*probability:
+            return
 
         # Swap mutation
-        pair = random.sample(self.route, 2)
-        pair[0], pair[1] = pair[1], pair[0]
+        if len(self.route) >= 2: 
+            nr1 = random.randint(0, len(self.route) - 1)
+            nr2 = random.randint(0, len(self.route) - 1)
+            self.route[nr1], self.route[nr2] = self.route[nr2], self.route[nr1]
+    
+    def createRouteString(self):
+        routeString = "0"
 
+        for customer in self.route: 
+            routeString += f' {customer.id}'
+        routeString += " 0"
+
+        return routeString
 
     def __str__(self):
-        return f'Belonging to depot {self.homeDepot.id} with a route of {len(self.route)} customers'
+        return f'{self.homeDepot.id} {self.id} {int(self.getRouteDistance())} {self.getRouteCarryingLoad()} {self.createRouteString()}'
+
+    def __repr__(self): 
+        return f'{self.homeDepot.id} {self.id} {int(self.getRouteDistance())} {self.getRouteCarryingLoad()} {self.createRouteString()}'
